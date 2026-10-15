@@ -75,7 +75,17 @@ export function AnalyticsTracker() {
     if (typeof window === "undefined" || pathname.startsWith("/admin")) return;
 
     const sectionTimers = new Map<string, number>();
-    const trackedSections = ["hero", "about", "services", "why-choose-us", "gallery", "vlogs", "contact"];
+    const trackedSections = [
+      "hero",
+      "services",
+      "about",
+      "why-choose-us",
+      "gallery",
+      "reviews",
+      "social",
+      "vlogs",
+      "contact",
+    ];
     const sessionId = getOrCreateSessionId();
 
     const reportDwell = (sectionId: string, durationMs: number) => {

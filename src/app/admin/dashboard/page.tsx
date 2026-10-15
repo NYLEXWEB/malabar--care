@@ -112,7 +112,7 @@ export default function AdminDashboardPage() {
           {summary?.databaseConnected ? (
             <span className="font-bold text-emerald-600 flex items-center gap-1">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              MongoDB Atlas Active
+              Storage Active
             </span>
           ) : (
             <span className="font-bold text-amber-600 flex items-center gap-1">
@@ -124,10 +124,10 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Presentation Mode Notice */}
-      <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-4 rounded-xl bg-blue-50/70 border border-blue-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0">
-            <Sparkles className="w-5 h-5" />
+          <div className="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 font-black text-xs">
+            MC
           </div>
           <div>
             <p className="text-xs font-bold text-blue-950 uppercase tracking-wide">

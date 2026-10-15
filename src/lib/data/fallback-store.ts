@@ -2,13 +2,21 @@ import {
   INITIAL_WEBSITE_CONTENT,
   INITIAL_SERVICES,
   INITIAL_VLOGS,
+  IServiceData,
+  IVlogData,
 } from "./initial-content";
+import {
+  CreateServiceInput,
+  UpdateServiceInput,
+  CreateVlogInput,
+  UpdateVlogInput,
+} from "../types/content";
 
 // Memory storage cache across API invocations in development
 interface MemoryStore {
   content: typeof INITIAL_WEBSITE_CONTENT;
-  services: Array<(typeof INITIAL_SERVICES)[0] & { _id: string; createdAt: Date; updatedAt: Date }>;
-  vlogs: Array<(typeof INITIAL_VLOGS)[0] & { _id: string; createdAt: Date; updatedAt: Date }>;
+  services: Array<IServiceData & { _id: string; createdAt: Date; updatedAt: Date }>;
+  vlogs: Array<IVlogData & { _id: string; createdAt: Date; updatedAt: Date }>;
   enquiries: Array<{
     _id: string;
     customerName: string;
@@ -194,9 +202,12 @@ export const fallbackStore = {
   getServiceBySlug: (slug: string) => {
     return getMemoryStore().services.find((s) => s.slug === slug);
   },
-  createService: (data: (typeof INITIAL_SERVICES)[0]) => {
+  createService: (data: CreateServiceInput) => {
     const store = getMemoryStore();
     const newService = {
+      features: [],
+      displayOrder: 0,
+      published: true,
       ...data,
       _id: `srv_${Date.now()}`,
       createdAt: new Date(),
@@ -205,9 +216,9 @@ export const fallbackStore = {
     store.services.push(newService);
     return newService;
   },
-  updateService: (id: string, data: Partial<(typeof INITIAL_SERVICES)[0]>) => {
+  updateService: (id: string, data: UpdateServiceInput) => {
     const store = getMemoryStore();
-    const idx = store.services.findIndex((s) => s._id === id);
+    const idx = store.services.findIndex((s) => s._id === id || s.slug === id);
     if (idx === -1) return null;
     store.services[idx] = {
       ...store.services[idx],
@@ -218,7 +229,7 @@ export const fallbackStore = {
   },
   deleteService: (id: string) => {
     const store = getMemoryStore();
-    const idx = store.services.findIndex((s) => s._id === id);
+    const idx = store.services.findIndex((s) => s._id === id || s.slug === id);
     if (idx === -1) return false;
     store.services.splice(idx, 1);
     return true;
@@ -234,12 +245,17 @@ export const fallbackStore = {
     );
   },
   getVlogBySlug: (slug: string) => {
-    return getMemoryStore().vlogs.find((v) => v.slug === slug);
+    return getMemoryStore().vlogs.find((v) => v.slug === slug || v._id === slug);
   },
-  createVlog: (data: (typeof INITIAL_VLOGS)[0]) => {
+  createVlog: (data: CreateVlogInput) => {
     const store = getMemoryStore();
     const newVlog = {
+      contentType: "article" as const,
+      status: "published" as const,
+      externalVideoUrl: "",
+      readTimeMinutes: 4,
       ...data,
+      publishedAt: data.publishedAt ? new Date(data.publishedAt) : new Date(),
       _id: `vlog_${Date.now()}`,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -247,20 +263,24 @@ export const fallbackStore = {
     store.vlogs.unshift(newVlog);
     return newVlog;
   },
-  updateVlog: (id: string, data: Partial<(typeof INITIAL_VLOGS)[0]>) => {
+  updateVlog: (id: string, data: UpdateVlogInput) => {
     const store = getMemoryStore();
-    const idx = store.vlogs.findIndex((v) => v._id === id);
+    const idx = store.vlogs.findIndex((v) => v._id === id || v.slug === id);
     if (idx === -1) return null;
+    const patch: any = { ...data };
+    if (patch.publishedAt) {
+      patch.publishedAt = new Date(patch.publishedAt);
+    }
     store.vlogs[idx] = {
       ...store.vlogs[idx],
-      ...data,
+      ...patch,
       updatedAt: new Date(),
     };
     return store.vlogs[idx];
   },
   deleteVlog: (id: string) => {
     const store = getMemoryStore();
-    const idx = store.vlogs.findIndex((v) => v._id === id);
+    const idx = store.vlogs.findIndex((v) => v._id === id || v.slug === id);
     if (idx === -1) return false;
     store.vlogs.splice(idx, 1);
     return true;
@@ -297,6 +317,13 @@ export const fallbackStore = {
     enq.status = status;
     enq.updatedAt = new Date();
     return enq;
+  },
+  deleteEnquiry: (id: string) => {
+    const store = getMemoryStore();
+    const idx = store.enquiries.findIndex((e) => e._id === id);
+    if (idx === -1) return false;
+    store.enquiries.splice(idx, 1);
+    return true;
   },
 
   trackEvent: (event: Omit<MemoryStore["analytics"][0], "_id">) => {

@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";
-import { getServerSession } from "@/lib/auth/session";
-import { getDbStatus } from "@/lib/db/connection";
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession, verifyApiAdminAuth } from "@/lib/auth/session";
+import { connectToDatabase, getDbStatus } from "@/lib/db/connection";
 
-export async function GET() {
-  const session = await getServerSession();
+export async function GET(request: NextRequest) {
+  await connectToDatabase();
+  const session = (await verifyApiAdminAuth(request)) || (await getServerSession());
   const dbStatus = getDbStatus();
 
   if (!session) {

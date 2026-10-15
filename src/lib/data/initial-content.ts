@@ -104,7 +104,31 @@ export const INITIAL_WEBSITE_CONTENT = {
   },
 };
 
-export const INITIAL_SERVICES = [
+export interface IServiceData {
+  title: string;
+  slug: string;
+  shortDescription: string;
+  description: string;
+  imageReference: string;
+  features: string[];
+  displayOrder: number;
+  published: boolean;
+}
+
+export interface IVlogData {
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  coverImageReference: string;
+  externalVideoUrl?: string;
+  contentType: "article" | "video";
+  status: "draft" | "published";
+  publishedAt?: Date;
+  readTimeMinutes?: number;
+}
+
+export const INITIAL_SERVICES: IServiceData[] = [
   {
     title: "Home Cleaning",
     slug: "home-cleaning",
@@ -112,7 +136,7 @@ export const INITIAL_SERVICES = [
       "Complete residential sanitization, floor scrubbing, kitchen degreasing, and bedroom dusting.",
     description:
       "Our Home Cleaning service transforms your residence into a fresh, spotless, and germ-free sanctuary. Our team addresses high-traffic living areas, bathroom sanitization, kitchen countertop and grease removal, window frame wiping, and deep floor buffing.",
-    imageReference: "/images/home-cleaning.jpg",
+    imageReference: "/services/home-cleaning.png",
     features: [
       "Kitchen grease breakdown & countertop disinfection",
       "Full bathroom scale removal & sanitizing",
@@ -129,7 +153,7 @@ export const INITIAL_SERVICES = [
       "Custom janitorial care, conference room polishing, workstation sanitization, and clean air care.",
     description:
       "A clean office boosts morale, productivity, and creates an exceptional impression for visiting clients. We offer scheduled evening or morning janitorial passes, carpet vacuuming, IT keyboard dusting, restroom restocking, and trash removal.",
-    imageReference: "/images/office-cleaning.jpg",
+    imageReference: "/services/office.png",
     features: [
       "Workstation keyboard & monitor sanitizing",
       "Conference room glass wipe-down & table buffing",
@@ -175,7 +199,7 @@ export const INITIAL_SERVICES = [
   },
 ];
 
-export const INITIAL_VLOGS = [
+export const INITIAL_VLOGS: IVlogData[] = [
   {
     title: "Simple Ways to Maintain a Cleaner Workspace",
     slug: "maintain-cleaner-workspace",

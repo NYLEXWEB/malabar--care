@@ -1,10 +1,12 @@
 import { Navbar } from "@/components/navbar";
 import { Hero } from "@/components/hero";
 import { TrustStrip } from "@/components/trust-strip";
-import { About } from "@/components/about";
 import { Services } from "@/components/services";
+import { About } from "@/components/about";
 import { WhyChooseUs } from "@/components/why-choose-us";
 import { Gallery } from "@/components/gallery";
+import { GoogleReviews } from "@/components/google-reviews";
+import { SocialMediaSection } from "@/components/social-media-section";
 import { VlogsSection } from "@/components/vlogs-section";
 import { ContactSection } from "@/components/contact-section";
 import { Footer } from "@/components/footer";
@@ -14,6 +16,8 @@ import {
   getVlogs,
 } from "@/lib/db/repository";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [content, services, vlogs] = await Promise.all([
     getWebsiteContent(),
@@ -22,13 +26,12 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Navigation */}
+    <div className="flex flex-col min-h-screen bg-white">
+      {/* Floating Modern Navbar */}
       <Navbar phone={content.contactInfo.phone} />
 
-      {/* Hero Section */}
+      {/* Hero Section with Full Background Image */}
       <Hero
-        badge={content.hero.badge}
         headline={content.hero.headline}
         supportingText={content.hero.supportingText}
         primaryCta={content.hero.primaryCta}
@@ -41,15 +44,13 @@ export default async function HomePage() {
 
       {/* Services Section */}
       <Services
-        badge={content.servicesHeading.badge}
         title={content.servicesHeading.title}
         subtitle={content.servicesHeading.subtitle}
-        services={services}
+        services={services as any}
       />
 
       {/* About Section */}
       <About
-        badge={content.about.badge}
         title={content.about.title}
         description={content.about.description}
         bulletPoints={content.about.bulletPoints}
@@ -59,20 +60,24 @@ export default async function HomePage() {
 
       {/* Why Choose Us */}
       <WhyChooseUs
-        badge={content.whyChooseUs.badge}
         title={content.whyChooseUs.title}
         items={content.whyChooseUs.items}
       />
 
-      {/* Work Showcase Gallery */}
+      {/* Interactive Photo Showcase Gallery */}
       <Gallery
-        badge={content.galleryHeading.badge}
         title={content.galleryHeading.title}
         subtitle={content.galleryHeading.subtitle}
       />
 
+      {/* Google Reviews Integration Section */}
+      <GoogleReviews />
+
+      {/* Social Media Channels Section (Google, Instagram, Facebook, WhatsApp) */}
+      <SocialMediaSection />
+
       {/* Vlogs & Insights */}
-      <VlogsSection vlogs={vlogs} />
+      <VlogsSection vlogs={vlogs as any} />
 
       {/* Interactive Contact & Quote Section */}
       <ContactSection contactInfo={content.contactInfo} />

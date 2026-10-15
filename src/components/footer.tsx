@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, Phone, Mail, MapPin, Lock } from "lucide-react";
+import { Phone, Mail, MapPin, Lock } from "lucide-react";
 
 interface FooterProps {
   footerData: {
@@ -17,81 +17,99 @@ interface FooterProps {
 
 export function Footer({ footerData, contactInfo }: FooterProps) {
   return (
-    <footer className="bg-slate-900 text-slate-300 pt-16 pb-12 border-t border-slate-800">
+    <footer className="bg-slate-950 text-slate-300 pt-16 pb-12 border-t border-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-900">
           
           {/* Brand & Summary Column */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white">
-                <Sparkles className="w-5 h-5" />
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-black text-sm flex items-center justify-center">
+                MC
               </div>
-              <span className="text-xl font-extrabold tracking-tight text-white">
+              <span className="text-lg font-black tracking-tight text-white">
                 MALABAR <span className="text-blue-400">CARE</span>
               </span>
             </Link>
 
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm">
+            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
               {footerData.description}
             </p>
 
-            <div className="flex items-center gap-3 pt-2">
-              {footerData.socialLinks.map((s, idx) => (
-                <a
-                  key={idx}
-                  href={s.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-analytics-id={`footer_social_${s.platform.toLowerCase()}`}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 hover:text-white transition-colors"
-                >
-                  {s.platform}
-                </a>
-              ))}
+            <div className="flex flex-wrap items-center gap-2 pt-2">
+              <a
+                href="https://maps.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-[11px] font-bold text-slate-300 hover:text-white transition-colors border border-slate-800"
+              >
+                Google 4.9★
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-[11px] font-bold text-slate-300 hover:text-white transition-colors border border-slate-800"
+              >
+                Instagram
+              </a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-[11px] font-bold text-slate-300 hover:text-white transition-colors border border-slate-800"
+              >
+                Facebook
+              </a>
+              <a
+                href="https://wa.me/919876543210"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-[11px] font-bold text-slate-300 hover:text-white transition-colors border border-slate-800"
+              >
+                WhatsApp
+              </a>
             </div>
           </div>
 
           {/* Quick Navigation Links */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Quick Links</h4>
-            <ul className="space-y-2 text-xs sm:text-sm">
+            <h4 className="text-[11px] font-bold uppercase tracking-wider text-white">Navigation</h4>
+            <ul className="space-y-2 text-xs">
               <li>
                 <Link href="/#hero" className="hover:text-white transition-colors">Home</Link>
               </li>
               <li>
-                <Link href="/#about" className="hover:text-white transition-colors">About Us</Link>
+                <Link href="/#services" className="hover:text-white transition-colors">Services &amp; Pricing</Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">Services</Link>
-              </li>
-              <li>
-                <Link href="/vlogs" className="hover:text-white transition-colors">Insights &amp; Vlogs</Link>
+                <Link href="/#about" className="hover:text-white transition-colors">About Malabar Care</Link>
               </li>
               <li>
                 <Link href="/#gallery" className="hover:text-white transition-colors">Work Showcase</Link>
               </li>
               <li>
-                <Link href="/#contact" className="hover:text-white transition-colors">Contact &amp; Quotes</Link>
+                <Link href="/#reviews" className="hover:text-white transition-colors">Google Reviews</Link>
               </li>
+             
             </ul>
           </div>
 
           {/* Service Offerings */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Service Offerings</h4>
-            <ul className="space-y-2 text-xs sm:text-sm">
+            <h4 className="text-[11px] font-bold uppercase tracking-wider text-white">Cleaning Programs</h4>
+            <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">Home Deep Cleaning</Link>
+                <Link href="/#services" className="hover:text-white transition-colors">Residential Deep Cleaning</Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">Office &amp; Janitorial Care</Link>
+                <Link href="/#services" className="hover:text-white transition-colors">Office &amp; Janitorial Contracts</Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">Tile &amp; Grout Sanitizing</Link>
+                <Link href="/#services" className="hover:text-white transition-colors">Tile &amp; Grout Steam Scrubbing</Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-white transition-colors">Commercial Facility Care</Link>
+                <Link href="/#services" className="hover:text-white transition-colors">Facility &amp; Warehouse Detailing</Link>
               </li>
               <li>
                 <Link href="/#services" className="hover:text-white transition-colors">Pre-Occupancy Deep Cleans</Link>
@@ -101,7 +119,7 @@ export function Footer({ footerData, contactInfo }: FooterProps) {
 
           {/* Contact Details & Admin Entry */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Contact</h4>
+            <h4 className="text-[11px] font-bold uppercase tracking-wider text-white">Direct Contact</h4>
             <div className="space-y-2.5 text-xs text-slate-400">
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-blue-400 shrink-0" />
@@ -117,27 +135,18 @@ export function Footer({ footerData, contactInfo }: FooterProps) {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-800">
-              <Link
-                href="/admin/login"
-                data-analytics-id="footer_admin_login"
-                className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors py-1 px-2 rounded hover:bg-slate-800"
-              >
-                <Lock className="w-3 h-3 text-slate-400" />
-                <span>Client Presentation &amp; Admin CMS</span>
-              </Link>
-            </div>
+          
           </div>
 
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
           <p>{footerData.copyrightText}</p>
           <div className="flex items-center gap-6">
             <span className="hover:text-slate-300 cursor-pointer">Privacy Notice</span>
             <span className="hover:text-slate-300 cursor-pointer">Terms of Service</span>
-            <span className="text-slate-400 font-mono text-[10px]">Demo Presentation v1.0</span>
+            <span className="text-slate-400 font-mono text-[10px]">Client Presentation Demo</span>
           </div>
         </div>
       </div>

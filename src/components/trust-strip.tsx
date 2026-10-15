@@ -50,16 +50,16 @@ export function TrustStrip({
   return (
     <section className="bg-white py-10 border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {items.map((item, idx) => {
             const IconComponent = iconMap[item.icon] || CheckCircle2;
             return (
               <div
                 key={idx}
-                className="flex items-start gap-4 p-4 rounded-xl transition-all duration-200 hover:bg-slate-50 border border-transparent hover:border-slate-100"
+                className="flex items-start gap-4 p-5 rounded-xl border border-slate-200/80 bg-white hover:border-slate-300 transition-colors"
               >
-                <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
-                  <IconComponent className="w-6 h-6" />
+                <div className="w-11 h-11 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                  <IconComponent className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 tracking-tight">

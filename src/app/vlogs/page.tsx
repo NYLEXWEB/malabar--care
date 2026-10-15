@@ -5,6 +5,8 @@ import { Footer } from "@/components/footer";
 import { getWebsiteContent, getVlogs } from "@/lib/db/repository";
 import { Video, FileText, Clock, ArrowRight, ArrowLeft } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function VlogsListPage() {
   const [content, vlogs] = await Promise.all([
     getWebsiteContent(),

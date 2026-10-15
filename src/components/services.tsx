@@ -22,34 +22,33 @@ interface ServicesProps {
 }
 
 export function Services({
-  badge = "Services & Solutions",
   title = "Comprehensive Cleaning Tailored to Your Space",
-  subtitle = "Choose from individual deep cleaning visits or recurring maintenance plans designed for residences, corporate offices, and retail venues.",
+  subtitle = "Choose from individual deep cleaning visits or recurring maintenance plans designed for residences, corporate offices, and commercial venues.",
   services,
 }: ServicesProps) {
   return (
-    <section id="services" className="py-16 sm:py-24 bg-slate-50/60 border-b border-slate-100">
+    <section id="services" className="py-16 sm:py-24 bg-white border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-          <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-            {badge}
-          </span>
-          <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-2">
+            Services &amp; Solutions
+          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
             {title}
           </h2>
-          <p className="mt-3 text-base text-slate-600 font-normal">
+          <p className="mt-3 text-sm sm:text-base text-slate-600 font-normal">
             {subtitle}
           </p>
         </div>
 
         {/* Services Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, idx) => (
             <div
               key={service.slug || idx}
-              className="group bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md hover:border-blue-300 transition-all duration-200 flex flex-col"
+              className="group bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-sm hover:border-blue-400 hover:-translate-y-1 transition-all duration-300 flex flex-col"
             >
               {/* Service Card Image */}
               <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
@@ -65,10 +64,10 @@ export function Services({
               {/* Service Card Details */}
               <div className="p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                     {service.title}
                   </h3>
-                  <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal line-clamp-3">
+                  <p className="mt-2 text-xs text-slate-600 leading-relaxed font-normal line-clamp-3">
                     {service.shortDescription}
                   </p>
 

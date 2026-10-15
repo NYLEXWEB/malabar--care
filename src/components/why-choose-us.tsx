@@ -27,7 +27,6 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export function WhyChooseUs({
-  badge = "The Malabar Care Advantage",
   title = "Why Clients Trust Our Hygiene Programs",
   items = [
     {
@@ -57,29 +56,29 @@ export function WhyChooseUs({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <span className="text-xs sm:text-sm font-bold tracking-wider uppercase text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-            {badge}
-          </span>
-          <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-2">
+            The Malabar Care Advantage
+          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
             {title}
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {items.map((item, idx) => {
             const IconComp = iconMap[item.icon] || CheckCircle2;
             return (
               <div
                 key={idx}
-                className="p-6 rounded-2xl border border-slate-200/90 bg-slate-50/50 hover:bg-white hover:shadow-md hover:border-slate-300 transition-all duration-200"
+                className="p-6 rounded-xl border border-slate-200 bg-white hover:border-blue-400 hover:-translate-y-1 transition-all duration-300 shadow-xs"
               >
-                <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center mb-4 shadow-sm shadow-blue-500/20">
+                <div className="w-12 h-12 rounded-lg bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center mb-4">
                   <IconComp className="w-6 h-6" />
                 </div>
-                <h3 className="text-base font-bold text-slate-900 tracking-tight">
+                <h3 className="text-sm font-bold text-slate-900 tracking-tight">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                <p className="mt-2 text-xs text-slate-500 leading-relaxed font-normal">
                   {item.description}
                 </p>
               </div>

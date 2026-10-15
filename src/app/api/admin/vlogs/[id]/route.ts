@@ -28,7 +28,7 @@ export async function PUT(
       );
     }
 
-    const updated = await updateVlog(id, parseResult.data);
+    const updated = await updateVlog(id, parseResult.data as any);
     if (!updated) {
       return NextResponse.json({ success: false, error: "Vlog post not found" }, { status: 404 });
     }

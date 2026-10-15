@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { connectToDatabase } from "./connection";
 import { AdminUser } from "../models/admin-user";
 import { WebsiteContent } from "../models/website-content";
@@ -12,11 +13,17 @@ import {
   INITIAL_SERVICES,
   INITIAL_VLOGS,
 } from "../data/initial-content";
+import {
+  CreateServiceInput,
+  UpdateServiceInput,
+  CreateVlogInput,
+  UpdateVlogInput,
+} from "../types/content";
 import { hashPassword, verifyPassword } from "../auth/passwords";
 
 export async function initAdminUser() {
   const { isConnected } = await connectToDatabase();
-  const username = process.env.ADMIN_USERNAME || "admin";
+  const username = (process.env.ADMIN_USERNAME || "admin").toLowerCase();
   const plainPassword = process.env.ADMIN_PASSWORD || "admin@123";
 
   if (!isConnected) {
@@ -27,22 +34,22 @@ export async function initAdminUser() {
   }
 
   try {
-    const existing = await AdminUser.findOne({ username: username.toLowerCase() });
+    let existing = await AdminUser.findOne({ username });
     if (!existing) {
       const passwordHash = await hashPassword(plainPassword);
-      await AdminUser.create({
-        username: username.toLowerCase(),
+      existing = await AdminUser.create({
+        username,
         passwordHash,
         role: "admin",
         isActive: true,
       });
       console.log(`[Auth] Seeded initial admin account: ${username}`);
     }
+    return { username, mode: "mongodb", id: existing._id.toString() };
   } catch (err) {
     console.warn("[Auth] Admin initialization notice:", err);
+    return { username, mode: "mongodb", error: String(err) };
   }
-
-  return { username, mode: "mongodb" };
 }
 
 export async function verifyAdminCredentials(
@@ -71,7 +78,7 @@ export async function verifyAdminCredentials(
   try {
     let admin = await AdminUser.findOne({ username: username.toLowerCase() });
     if (!admin) {
-      // If table is newly created, initialize admin
+      // If admin doesn't exist yet, seed it
       await initAdminUser();
       admin = await AdminUser.findOne({ username: username.toLowerCase() });
     }
@@ -82,6 +89,19 @@ export async function verifyAdminCredentials(
 
     const matches = await verifyPassword(plainPassword, admin.passwordHash);
     if (!matches) {
+      // If password in .env.local was updated, automatically sync hash
+      if (username.toLowerCase() === expectedUsername && plainPassword === expectedPassword) {
+        admin.passwordHash = await hashPassword(plainPassword);
+        await admin.save();
+        return {
+          valid: true,
+          user: {
+            username: admin.username,
+            role: admin.role,
+            userId: admin._id.toString(),
+          },
+        };
+      }
       return { valid: false };
     }
 
@@ -158,14 +178,13 @@ export async function getServices(onlyPublished = false) {
   }
 
   try {
-    const query = onlyPublished ? { published: true } : {};
-    const services = await Service.find(query).sort({ displayOrder: 1 }).lean();
-    if (services.length === 0) {
+    const totalCount = await Service.countDocuments();
+    if (totalCount === 0) {
       // Seed initial services in DB
       await Service.insertMany(INITIAL_SERVICES);
-      return Service.find(query).sort({ displayOrder: 1 }).lean();
     }
-    return services;
+    const query = onlyPublished ? { published: true } : {};
+    return await Service.find(query).sort({ displayOrder: 1 }).lean();
   } catch {
     return fallbackStore.getServices(onlyPublished);
   }
@@ -178,7 +197,10 @@ export async function getServiceBySlug(slug: string) {
   }
 
   try {
-    const srv = await Service.findOne({ slug }).lean();
+    let srv = await Service.findOne({ slug }).lean();
+    if (!srv && mongoose.Types.ObjectId.isValid(slug)) {
+      srv = await Service.findById(slug).lean();
+    }
     if (!srv) {
       return fallbackStore.getServiceBySlug(slug);
     }
@@ -188,7 +210,7 @@ export async function getServiceBySlug(slug: string) {
   }
 }
 
-export async function createService(data: (typeof INITIAL_SERVICES)[0]) {
+export async function createService(data: CreateServiceInput) {
   const { isConnected } = await connectToDatabase();
   if (!isConnected) {
     return fallbackStore.createService(data);
@@ -202,14 +224,20 @@ export async function createService(data: (typeof INITIAL_SERVICES)[0]) {
   }
 }
 
-export async function updateService(id: string, data: Partial<(typeof INITIAL_SERVICES)[0]>) {
+export async function updateService(id: string, data: UpdateServiceInput) {
   const { isConnected } = await connectToDatabase();
   if (!isConnected) {
     return fallbackStore.updateService(id, data);
   }
 
   try {
-    const srv = await Service.findByIdAndUpdate(id, { $set: data }, { new: true }).lean();
+    let srv = null;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      srv = await Service.findByIdAndUpdate(id, { $set: data }, { new: true }).lean();
+    }
+    if (!srv) {
+      srv = await Service.findOneAndUpdate({ slug: id }, { $set: data }, { new: true }).lean();
+    }
     return srv || fallbackStore.updateService(id, data);
   } catch {
     return fallbackStore.updateService(id, data);
@@ -223,8 +251,14 @@ export async function deleteService(id: string) {
   }
 
   try {
-    const result = await Service.findByIdAndDelete(id);
-    return Boolean(result);
+    let result = null;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      result = await Service.findByIdAndDelete(id);
+    }
+    if (!result) {
+      result = await Service.findOneAndDelete({ slug: id });
+    }
+    return Boolean(result) || fallbackStore.deleteService(id);
   } catch {
     return fallbackStore.deleteService(id);
   }
@@ -240,13 +274,12 @@ export async function getVlogs(onlyPublished = false) {
   }
 
   try {
-    const query: { status?: "published" | "draft" } = onlyPublished ? { status: "published" } : {};
-    const vlogs = await VlogPost.find(query).sort({ publishedAt: -1, createdAt: -1 }).lean();
-    if (vlogs.length === 0) {
+    const totalCount = await VlogPost.countDocuments();
+    if (totalCount === 0) {
       await VlogPost.insertMany(INITIAL_VLOGS);
-      return VlogPost.find(query).sort({ publishedAt: -1, createdAt: -1 }).lean();
     }
-    return vlogs;
+    const query: { status?: "published" | "draft" } = onlyPublished ? { status: "published" } : {};
+    return await VlogPost.find(query).sort({ publishedAt: -1, createdAt: -1 }).lean();
   } catch {
     return fallbackStore.getVlogs(onlyPublished);
   }
@@ -259,7 +292,10 @@ export async function getVlogBySlug(slug: string) {
   }
 
   try {
-    const vlog = await VlogPost.findOne({ slug }).lean();
+    let vlog = await VlogPost.findOne({ slug }).lean();
+    if (!vlog && mongoose.Types.ObjectId.isValid(slug)) {
+      vlog = await VlogPost.findById(slug).lean();
+    }
     if (!vlog) {
       return fallbackStore.getVlogBySlug(slug);
     }
@@ -269,7 +305,7 @@ export async function getVlogBySlug(slug: string) {
   }
 }
 
-export async function createVlog(data: (typeof INITIAL_VLOGS)[0]) {
+export async function createVlog(data: CreateVlogInput) {
   const { isConnected } = await connectToDatabase();
   if (!isConnected) {
     return fallbackStore.createVlog(data);
@@ -283,14 +319,20 @@ export async function createVlog(data: (typeof INITIAL_VLOGS)[0]) {
   }
 }
 
-export async function updateVlog(id: string, data: Partial<(typeof INITIAL_VLOGS)[0]>) {
+export async function updateVlog(id: string, data: UpdateVlogInput) {
   const { isConnected } = await connectToDatabase();
   if (!isConnected) {
     return fallbackStore.updateVlog(id, data);
   }
 
   try {
-    const vlog = await VlogPost.findByIdAndUpdate(id, { $set: data }, { new: true }).lean();
+    let vlog = null;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      vlog = await VlogPost.findByIdAndUpdate(id, { $set: data }, { new: true }).lean();
+    }
+    if (!vlog) {
+      vlog = await VlogPost.findOneAndUpdate({ slug: id }, { $set: data }, { new: true }).lean();
+    }
     return vlog || fallbackStore.updateVlog(id, data);
   } catch {
     return fallbackStore.updateVlog(id, data);
@@ -304,8 +346,14 @@ export async function deleteVlog(id: string) {
   }
 
   try {
-    const result = await VlogPost.findByIdAndDelete(id);
-    return Boolean(result);
+    let result = null;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      result = await VlogPost.findByIdAndDelete(id);
+    }
+    if (!result) {
+      result = await VlogPost.findOneAndDelete({ slug: id });
+    }
+    return Boolean(result) || fallbackStore.deleteVlog(id);
   } catch {
     return fallbackStore.deleteVlog(id);
   }
@@ -325,6 +373,26 @@ export async function getEnquiries() {
     return list;
   } catch {
     return fallbackStore.getEnquiries();
+  }
+}
+
+export async function getEnquiryById(id: string) {
+  const { isConnected } = await connectToDatabase();
+  if (!isConnected) {
+    const list = fallbackStore.getEnquiries();
+    return list.find((e) => e._id === id) || null;
+  }
+
+  try {
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      const enq = await Enquiry.findById(id).lean();
+      if (enq) return enq;
+    }
+    const list = fallbackStore.getEnquiries();
+    return list.find((e) => e._id === id) || null;
+  } catch {
+    const list = fallbackStore.getEnquiries();
+    return list.find((e) => e._id === id) || null;
   }
 }
 
@@ -356,6 +424,9 @@ export async function updateEnquiryStatus(id: string, status: "new" | "contacted
   }
 
   try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return fallbackStore.updateEnquiryStatus(id, status);
+    }
     const updated = await Enquiry.findByIdAndUpdate(
       id,
       { $set: { status } },
@@ -365,6 +436,24 @@ export async function updateEnquiryStatus(id: string, status: "new" | "contacted
   } catch {
     return fallbackStore.updateEnquiryStatus(id, status);
   }
+}
+
+export async function deleteEnquiry(id: string) {
+  const { isConnected } = await connectToDatabase();
+  fallbackStore.deleteEnquiry(id);
+
+  if (isConnected) {
+    try {
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        const result = await Enquiry.findByIdAndDelete(id);
+        return Boolean(result);
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  return true;
 }
 
 // ----------------------------------------------------
@@ -401,7 +490,8 @@ export async function trackAnalyticsEvent(data: {
 
 export async function getAnalyticsSummary(days = 30) {
   const { isConnected } = await connectToDatabase();
-  const sinceDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+  const safeDays = typeof days === "number" && !isNaN(days) && days > 0 ? days : 30;
+  const sinceDate = new Date(Date.now() - safeDays * 24 * 60 * 60 * 1000);
 
   let events: Array<{
     eventType: string;
@@ -482,8 +572,21 @@ export async function getAnalyticsSummary(days = 30) {
     }
   });
 
-  const enquiryCount = (await getEnquiries()).length;
-  const publishedVlogCount = (await getVlogs(true)).length;
+  let enquiryCount = 0;
+  let publishedVlogCount = 0;
+
+  if (isConnected) {
+    try {
+      enquiryCount = await Enquiry.countDocuments();
+      publishedVlogCount = await VlogPost.countDocuments({ status: "published" });
+    } catch {
+      enquiryCount = (await getEnquiries()).length;
+      publishedVlogCount = (await getVlogs(true)).length;
+    }
+  } else {
+    enquiryCount = (await getEnquiries()).length;
+    publishedVlogCount = (await getVlogs(true)).length;
+  }
 
   return {
     databaseConnected: isConnected,
@@ -551,4 +654,23 @@ export async function recordMediaAsset(data: {
   } catch {
     return fallbackStore.addMediaAsset(assetPayload);
   }
+}
+
+export async function deleteMediaAsset(fileId: string) {
+  const { isConnected } = await connectToDatabase();
+  fallbackStore.deleteMediaAsset(fileId);
+
+  if (isConnected) {
+    try {
+      const orConditions: Array<{ fileId?: string; _id?: string }> = [{ fileId }];
+      if (mongoose.Types.ObjectId.isValid(fileId)) {
+        orConditions.push({ _id: fileId });
+      }
+      await MediaAsset.deleteMany({ $or: orConditions });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  return true;
 }

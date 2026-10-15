@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyApiAdminAuth } from "@/lib/auth/session";
 import { uploadToGridFS } from "@/lib/db/gridfs";
 import { getMediaAssetsList, recordMediaAsset } from "@/lib/db/repository";
-import { isDbConnected } from "@/lib/db/connection";
+import { connectToDatabase, isDbConnected } from "@/lib/db/connection";
 
 const ALLOWED_MIME_TYPES = [
   "image/jpeg",
@@ -15,10 +15,11 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function GET() {
   try {
+    const { isConnected } = await connectToDatabase();
     const assets = await getMediaAssetsList();
     return NextResponse.json({
       success: true,
-      storageMode: isDbConnected() ? "gridfs" : "local_fallback",
+      storageMode: isConnected ? "gridfs" : "local_fallback",
       assets,
     });
   } catch (error) {
@@ -71,7 +72,8 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
 
     // If MongoDB is connected, upload to MongoDB GridFS!
-    if (isDbConnected()) {
+    const { isConnected } = await connectToDatabase();
+    if (isConnected) {
       try {
         const uploadResult = await uploadToGridFS(buffer, file.name, file.type);
         if (uploadResult) {

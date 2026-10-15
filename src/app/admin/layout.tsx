@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   FileEdit,
-  Sparkles,
   Layers,
   BookOpen,
   Image as ImageIcon,
@@ -80,21 +79,22 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-slate-100/70 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-white flex flex-col md:flex-row">
       
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex md:w-64 flex-col bg-slate-900 border-r border-slate-800 text-slate-300">
+      {/* Desktop Pure-White Clean Sidebar */}
+      <aside className="hidden md:flex md:w-64 flex-col bg-white border-r border-slate-200 text-slate-700">
+        
         {/* Brand Header */}
-        <div className="h-20 flex items-center gap-3 px-6 border-b border-slate-800">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
-            <Sparkles className="w-5 h-5" />
+        <div className="h-20 flex items-center gap-3 px-6 border-b border-slate-100">
+          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-sm tracking-tight transition-transform hover:scale-105">
+            MC
           </div>
           <div>
-            <span className="text-base font-extrabold text-white tracking-tight">
-              MALABAR <span className="text-blue-400">CARE</span>
+            <span className="text-base font-extrabold text-slate-900 tracking-tight">
+              MALABAR <span className="text-blue-600">CARE</span>
             </span>
-            <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
-              Admin CMS &amp; Demo
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+              Admin CMS &amp; Portal
             </p>
           </div>
         </div>
@@ -110,11 +110,11 @@ export default function AdminLayout({
                 href={item.href}
                 className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                   active
-                    ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
-                    : "text-slate-400 hover:text-white hover:bg-slate-800/80"
+                    ? "bg-blue-50 text-blue-700 border border-blue-200/80 font-bold"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                 }`}
               >
-                <Icon className="w-4 h-4 shrink-0" />
+                <Icon className={`w-4 h-4 shrink-0 transition-colors ${active ? "text-blue-600" : "text-slate-400"}`} />
                 <span>{item.label}</span>
               </Link>
             );
@@ -122,71 +122,74 @@ export default function AdminLayout({
         </nav>
 
         {/* Database & Storage Status Indicator */}
-        <div className="p-4 mx-4 mb-4 rounded-xl bg-slate-800/80 border border-slate-700/80 text-xs">
+        <div className="p-3.5 mx-4 mb-4 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
           <div className="flex items-center gap-2 mb-1">
-            <Database className="w-3.5 h-3.5 text-blue-400" />
-            <span className="font-bold text-white text-[11px]">Database Status</span>
+            <Database className="w-3.5 h-3.5 text-blue-600" />
+            <span className="font-bold text-slate-900 text-[11px]">Database Status</span>
           </div>
           <div className="flex items-center gap-1.5 text-[11px]">
             {dbStatus.isConnected ? (
               <>
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-emerald-300 font-medium">MongoDB Atlas</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="text-emerald-700 font-semibold">MongoDB Atlas Active</span>
               </>
             ) : (
               <>
-                <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-amber-300 font-medium">Demo In-Memory Mode</span>
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                <span className="text-amber-700 font-semibold">Demo In-Memory Mode</span>
               </>
             )}
           </div>
-          <p className="text-[10px] text-slate-400 mt-1 leading-tight">
+          <p className="text-[10px] text-slate-500 mt-1 leading-tight">
             {dbStatus.isConnected
               ? "All writes persist to MongoDB Atlas & GridFS."
-              : "Active demo fallback mode. Configure MONGODB_URI for cloud persistence."}
+              : "Demo storage mode. Ready for presentation."}
           </p>
         </div>
 
         {/* User Badge & Logout */}
-        <div className="p-4 border-t border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
+        <div className="p-4 border-t border-slate-100 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
               <User className="w-4 h-4" />
             </div>
             <div className="overflow-hidden">
-              <p className="text-xs font-bold text-white truncate">{user?.username || "admin"}</p>
-              <p className="text-[10px] text-slate-400 capitalize">{user?.role || "Administrator"}</p>
+              <p className="text-xs font-bold text-slate-900 truncate">{user?.username || "admin"}</p>
+              <p className="text-[10px] text-slate-500 capitalize">{user?.role || "Administrator"}</p>
             </div>
           </div>
 
           <button
             onClick={handleLogout}
             title="Sign out of Admin Dashboard"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
           </button>
         </div>
       </aside>
 
-      {/* Main Admin Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      {/* Main Admin Area - Pure White Canvas */}
+      <div className="flex-1 flex flex-col min-w-0 bg-white">
         
         {/* Top Header */}
-        <header className="h-16 sm:h-20 bg-white border-b border-slate-200/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+        <header className="h-16 sm:h-20 bg-white border-b border-slate-200 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
           <div className="flex items-center gap-3">
             {/* Mobile Toggle */}
             <button
               onClick={() => setMobileNavOpen(!mobileNavOpen)}
-              className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100"
+              className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 cursor-pointer"
               aria-label="Toggle admin sidebar"
             >
               {mobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
 
-            <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
-              Malabar Care Control Center
-            </h1>
+            <div>
+              <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+                Malabar Care Control Center
+              </h1>
+
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -194,7 +197,7 @@ export default function AdminLayout({
             <Link
               href="/"
               target="_blank"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-50 transition-colors"
             >
               <span>Live Website</span>
               <ExternalLink className="w-3 h-3 text-slate-400" />
@@ -202,7 +205,7 @@ export default function AdminLayout({
 
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Logout</span>
@@ -212,7 +215,7 @@ export default function AdminLayout({
 
         {/* Mobile Navigation Drawer */}
         {mobileNavOpen && (
-          <div className="md:hidden bg-slate-900 text-slate-200 p-4 space-y-1.5 border-b border-slate-800">
+          <div className="md:hidden bg-white text-slate-800 p-4 space-y-1.5 border-b border-slate-200">
             {navItems.map((item) => {
               const Icon = item.icon;
               const active = pathname === item.href;
@@ -222,10 +225,10 @@ export default function AdminLayout({
                   href={item.href}
                   onClick={() => setMobileNavOpen(false)}
                   className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold ${
-                    active ? "bg-blue-600 text-white" : "text-slate-300 hover:bg-slate-800"
+                    active ? "bg-blue-50 text-blue-700 border border-blue-200/80" : "text-slate-700 hover:bg-slate-50"
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-4 h-4 text-blue-600" />
                   <span>{item.label}</span>
                 </Link>
               );
@@ -234,7 +237,7 @@ export default function AdminLayout({
         )}
 
         {/* Child Pages Content */}
-        <main className="flex-1 p-4 sm:p-8 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-8 overflow-y-auto bg-white">
           {children}
         </main>
 

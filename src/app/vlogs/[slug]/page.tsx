@@ -6,6 +6,8 @@ import { Footer } from "@/components/footer";
 import { getWebsiteContent, getVlogBySlug } from "@/lib/db/repository";
 import { ArrowLeft, Clock, Video, FileText, Share2, Calendar } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function VlogDetailPage({
   params,
 }: {

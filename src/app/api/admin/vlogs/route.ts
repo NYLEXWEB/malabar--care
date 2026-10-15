@@ -42,7 +42,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const created = await createVlog(parseResult.data);
+    const created = await createVlog({
+      ...parseResult.data,
+      publishedAt: new Date(),
+    });
     return NextResponse.json(
       {
         success: true,

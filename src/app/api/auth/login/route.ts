@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await setSessionCookie({
+    const token = await setSessionCookie({
       userId: authResult.user.userId,
       username: authResult.user.username,
       role: authResult.user.role,
@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: "Authentication successful",
+      token,
       user: {
         username: authResult.user.username,
         role: authResult.user.role,

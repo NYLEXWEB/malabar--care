@@ -61,7 +61,10 @@ export async function clearSessionCookie() {
 }
 
 export async function verifyApiAdminAuth(request: NextRequest): Promise<SessionPayload | null> {
-  const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+  const cookieToken = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+  const authHeader = request.headers.get("authorization");
+  const bearerToken = authHeader?.startsWith("Bearer ") ? authHeader.slice(7).trim() : null;
+  const token = cookieToken || bearerToken;
   if (!token) return null;
   return verifySessionToken(token);
 }
