@@ -240,7 +240,7 @@ export async function getVlogs(onlyPublished = false) {
   }
 
   try {
-    const query = onlyPublished ? { status: "published" } : {};
+    const query: { status?: "published" | "draft" } = onlyPublished ? { status: "published" } : {};
     const vlogs = await VlogPost.find(query).sort({ publishedAt: -1, createdAt: -1 }).lean();
     if (vlogs.length === 0) {
       await VlogPost.insertMany(INITIAL_VLOGS);
@@ -382,15 +382,20 @@ export async function trackAnalyticsEvent(data: {
   metadata?: Record<string, unknown>;
 }) {
   const { isConnected } = await connectToDatabase();
+  const eventPayload = {
+    ...data,
+    timestamp: data.timestamp || new Date(),
+  };
+
   if (!isConnected) {
-    return fallbackStore.trackEvent(data);
+    return fallbackStore.trackEvent(eventPayload);
   }
 
   try {
-    const evt = await AnalyticsEvent.create(data);
+    const evt = await AnalyticsEvent.create(eventPayload);
     return evt.toObject();
   } catch {
-    return fallbackStore.trackEvent(data);
+    return fallbackStore.trackEvent(eventPayload);
   }
 }
 
@@ -530,14 +535,20 @@ export async function recordMediaAsset(data: {
   storageMode: "gridfs" | "local_fallback";
 }) {
   const { isConnected } = await connectToDatabase();
+  const assetPayload = {
+    ...data,
+    uploadedBy: data.uploadedBy || "admin",
+    createdAt: new Date(),
+  };
+
   if (!isConnected) {
-    return fallbackStore.addMediaAsset(data);
+    return fallbackStore.addMediaAsset(assetPayload);
   }
 
   try {
-    const asset = await MediaAsset.create(data);
+    const asset = await MediaAsset.create(assetPayload);
     return asset.toObject();
   } catch {
-    return fallbackStore.addMediaAsset(data);
+    return fallbackStore.addMediaAsset(assetPayload);
   }
 }

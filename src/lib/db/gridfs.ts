@@ -33,8 +33,8 @@ export async function uploadToGridFS(
     const uniqueFilename = `${Date.now()}-${safeName}`;
 
     const uploadStream = gridFs.openUploadStream(uniqueFilename, {
-      contentType,
       metadata: {
+        contentType,
         originalName: filename,
         uploadedAt: new Date(),
       },
@@ -67,10 +67,13 @@ export async function getGridFSFileStream(fileId: string) {
 
     const file = files[0];
     const stream = gridFs.openDownloadStream(objectId);
+    const metadata = (file.metadata || {}) as { contentType?: string };
+    const contentType = metadata.contentType || "application/octet-stream";
+
     return {
       stream,
       file,
-      contentType: file.contentType || "application/octet-stream",
+      contentType,
       filename: file.filename,
     };
   } catch {
