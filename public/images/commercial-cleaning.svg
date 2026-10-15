@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="commGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="60%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="commGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.05" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#commGrad)" />
+  <circle cx="400" cy="240" r="180" fill="url(#commGlow)" />
+  
+  <g transform="translate(400, 240) scale(1.6)" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Corporate Skyscraper Silhouette -->
+    <rect x="-35" y="-30" width="30" height="70" rx="3" stroke="#ffffff" stroke-width="2.5"/>
+    <rect x="5" y="-55" width="35" height="95" rx="3" stroke="#38bdf8" stroke-width="2.5"/>
+    <line x1="-25" y1="-15" x2="-15" y2="-15" stroke="#ffffff" stroke-width="2"/>
+    <line x1="-25" y1="5" x2="-15" y2="5" stroke="#ffffff" stroke-width="2"/>
+    <line x1="-25" y1="25" x2="-15" y2="25" stroke="#ffffff" stroke-width="2"/>
+    <line x1="15" y1="-35" x2="30" y2="-35" stroke="#38bdf8" stroke-width="2"/>
+    <line x1="15" y1="-15" x2="30" y2="-15" stroke="#38bdf8" stroke-width="2"/>
+    <line x1="15" y1="5" x2="30" y2="5" stroke="#38bdf8" stroke-width="2"/>
+    <!-- Sparkles -->
+    <path d="M48 -45 L50 -38 L57 -36 L50 -34 L48 -27 L46 -34 L39 -36 L46 -38 Z" fill="#38bdf8" stroke="none"/>
+  </g>
+  
+  <text x="400" y="440" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="28" fill="#ffffff" letter-spacing="1">COMMERCIAL &amp; FACILITY CARE</text>
+  <text x="400" y="475" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="400" font-size="16" fill="#94a3b8">Retail Spaces • Warehouses • Educational &amp; Health Facilities</text>
+</svg>
