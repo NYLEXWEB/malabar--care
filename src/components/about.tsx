@@ -12,7 +12,7 @@ interface AboutProps {
 }
 
 export function About({
-  title = "Dedicated to Higher Standards of Cleanliness & Comfort",
+  title = "Dedicated to Higher Standards of Cleanliness & Comfortt",
   description = "Malabar Care was established to provide dependable, systematically managed cleaning services for residences, workplaces, and commercial venues. We combine trained professionals, modern tools, and eco-friendly products to give you peace of mind.",
   bulletPoints = [
     "Rigorous quality supervision on every project",
@@ -21,7 +21,7 @@ export function About({
     "Custom service packages tailored to your exact property layout",
   ],
   ctaLabel = "Enquire About Our Plans",
-  image = "/images/about-team.svg",
+  image = "/images/about.png",
 }: AboutProps) {
   return (
     <section id="about" className="py-16 sm:py-24 bg-white border-b border-slate-100">
