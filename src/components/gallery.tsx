@@ -13,12 +13,12 @@ interface GalleryProps {
 const ROW_1_IMAGES = [
   {
     id: "r1-1",
-    src: "/images/hero.jpg",
+    src: "/services/office.png",
     alt: "Pristine Luxury Living Room Deep Clean",
   },
   {
     id: "r1-2",
-    src: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80",
+    src: "/images/about.png",
     alt: "Professional Surface Sanitization",
   },
   {
@@ -28,17 +28,17 @@ const ROW_1_IMAGES = [
   },
   {
     id: "r1-4",
-    src: "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=900&q=80",
+    src: "/images/office-cleaning.jpg",
     alt: "Modern Modular Kitchen Deep Clean",
   },
   {
     id: "r1-5",
-    src: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=900&q=80",
+    src: "/services/home-cleaning.png",
     alt: "Gleaming Marble Bathroom Sanitization",
   },
   {
     id: "r1-6",
-    src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80",
+    src: "/services/Deep Cleaning & Sanitization.png",
     alt: "High-End Residential Living Space",
   },
 ];
@@ -46,32 +46,32 @@ const ROW_1_IMAGES = [
 const ROW_2_IMAGES = [
   {
     id: "r2-1",
-    src: "/images/office-cleaning.jpg",
+    src: "/services/office.png",
     alt: "Corporate Office Workstation Cleaning",
   },
   {
     id: "r2-2",
-    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80",
+       src: "/images/about.png",
     alt: "Executive Boardroom & Glass Partitions",
   },
   {
     id: "r2-3",
-    src: "https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=900&q=80",
+     src: "/images/home-cleaning.jpg",
     alt: "Hardwood Floor Cleaning and Polishing",
   },
   {
     id: "r2-4",
-    src: "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&w=900&q=80",
+   src: "/images/office-cleaning.jpg",
     alt: "Specialized Deep Sanitization",
   },
   {
     id: "r2-5",
-    src: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=900&q=80",
+   src: "/services/home-cleaning.png",
     alt: "Hygiene Standard Certified Cleaning",
   },
   {
     id: "r2-6",
-    src: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=900&q=80",
+       src: "/services/Deep Cleaning & Sanitization.png",
     alt: "Modern Commercial Facility Cleaning",
   },
 ];
