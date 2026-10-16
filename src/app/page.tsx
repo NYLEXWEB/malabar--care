@@ -47,6 +47,7 @@ export default async function HomePage() {
         title={content.servicesHeading.title}
         subtitle={content.servicesHeading.subtitle}
         services={services as any}
+        whatsappNumber={content.contactInfo.whatsapp || content.contactInfo.phone}
       />
 
       {/* About Section */}

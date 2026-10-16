@@ -193,7 +193,14 @@ export const fallbackStore = {
   },
 
   getServices: (onlyPublished = false) => {
-    const services = getMemoryStore().services;
+    const store = getMemoryStore();
+    store.services.forEach((s) => {
+      const match = INITIAL_SERVICES.find((init) => init.slug === s.slug);
+      if (match && match.imageReference) {
+        s.imageReference = match.imageReference;
+      }
+    });
+    const services = store.services;
     if (onlyPublished) {
       return services.filter((s) => s.published);
     }

@@ -170,7 +170,7 @@ export const INITIAL_SERVICES: IServiceData[] = [
       "Intensive top-to-bottom scrub, hospital-grade disinfection, tile descaling, and high-touch area sterilizing.",
     description:
       "Designed for move-in/move-out readiness, post-renovation dust clearing, or thorough seasonal hygiene resets. Our deep cleaning team cleans baseboards, interior cabinets, vents, tile grout, and hard-to-reach ceiling fixtures.",
-    imageReference: "/images/deep-cleaning.svg",
+    imageReference: "/services/deep-cleaning.png",
     features: [
       "Steam cleaning for tile grout and sanitization",
       "Cabinet interiors & appliance exterior detailing",
@@ -187,7 +187,7 @@ export const INITIAL_SERVICES: IServiceData[] = [
       "High-traffic floor maintenance, warehouse detailing, retail storefront glass, and post-construction sweeps.",
     description:
       "For retail outlets, clinics, hospitality spaces, and commercial showrooms. We deploy industrial rotary buffers, heavy-duty extraction, and structured compliance checklists meeting municipal health and safety codes.",
-    imageReference: "/images/commercial-cleaning.svg",
+    imageReference: "/services/commercial.png",
     features: [
       "Industrial rotary floor scrubbers & sealers",
       "Storefront exterior & interior window cleaning",
